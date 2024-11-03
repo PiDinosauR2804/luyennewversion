@@ -488,7 +488,6 @@ for txt_file in txt_files:
             workbook.save(f"Random_{data_set}_{center}_CL1.xlsx")
         # Tăng dòng cho lần chạy tiếp theo
         row += 1
-        log_file.close()
-
+        
 workbook.close()
 
