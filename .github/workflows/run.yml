@@ -11,8 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        center: ["center"]
-        data_set: ["U_10_0.5_Num_1.txt"]
+        center: ["center", "outside"]
+        data_set: ["U_10_0.5_Num_1.txt", "U_10_0.5_Num_2.txt"]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
