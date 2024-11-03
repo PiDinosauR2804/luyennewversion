@@ -23,6 +23,7 @@ global current_neighborhood
 global LOOP_IMPROVED
 global SET_LAST_10
 global BEST
+global start_time
 
 # Set up chỉ số -------------------------------------------------------------------
 ITE = 1
@@ -32,9 +33,10 @@ epsilon = (-1) * 0.00001
 LOOP_IMPROVED = 0
 SET_LAST_10 = [] 
 BEST = []
+TIME_LIMIT = 20000
 data_set = os.getenv('DATA_SET', "U_10_0.5_Num_1.txt")
 center = os.getenv('CENTER', "center")
-
+start_time = time.time()
 # 
 
 # random.seed(7)
@@ -48,6 +50,8 @@ def roulette_wheel_selection(population, fitness_scores):
 def Tabu_search(init_solution, tabu_tenure, CC, first_time, Data1, index_consider_elite_set):
     solution_pack_len = 5
     solution_pack = []
+
+    
 
     current_fitness, current_truck_time, current_sum_fitness = Function.fitness(init_solution)
     best_sol = init_solution
@@ -81,7 +85,9 @@ def Tabu_search(init_solution, tabu_tenure, CC, first_time, Data1, index_conside
     current_sol = init_solution
     
     while T < SEGMENT:
-        
+        end_time = time.time()
+        if end_time - start_time > TIME_LIMIT:
+            break
         tabu_tenure = tabu_tenure1 = tabu_tenure3 = tabu_tenure2 = random.uniform(2*math.log(Data.number_of_cities), Data.number_of_cities)
         Tabu_Structure = [(tabu_tenure +1) * (-1)] * Data.number_of_cities
         Tabu_Structure1 = [(tabu_tenure +1) * (-1)] * Data.number_of_cities
@@ -355,8 +361,8 @@ def Tabu_search(init_solution, tabu_tenure, CC, first_time, Data1, index_conside
 def Tabu_search_for_CVRP(CC):
     Data1 = []
     list_init = []
-    
     start_time = time.time()
+    
     current_sol5 = Function.initial_solution7()
     list_init.append(current_sol5)
 
@@ -405,7 +411,6 @@ def Tabu_search_for_CVRP(CC):
                     best_fitness_in_brnei = cfnode
             temp = ["break", "break", "break", "break", "break", "break", "break"]
             Data1.append(temp)
-            print("uhuhu")
             print(best_sol_in_brnei)
             best_sol1, best_fitness1, result_print1, solution_pack1, Data1 = Tabu_search(init_solution=best_sol_in_brnei, tabu_tenure=Data.number_of_cities-1, CC=CC, first_time=False, Data1=Data1, index_consider_elite_set=pi+1)
             # print("-----------------", pi, "------------------------")
@@ -415,9 +420,6 @@ def Tabu_search_for_CVRP(CC):
                 best_sol = best_sol1
                 best_fitness = best_fitness1
         
-        end_time = time.time()
-        # if end_time - start_time > 3000:
-        #     break
 
     return best_fitness, best_sol
 
@@ -464,7 +466,7 @@ for txt_file in txt_files:
         for i in range(ITE):
             BEST = []
             # print("------------------------",i,"------------------------")
-            start_time = time.time()
+            start_time_1 = time.time()
             best_fitness, best_sol = Tabu_search_for_CVRP(1)
             print("---------- RESULT ----------")
             print(best_sol)
@@ -472,8 +474,8 @@ for txt_file in txt_files:
             avg += best_fitness/ITE
             result.append(best_fitness)
             print(Function.Check_if_feasible(best_sol))
-            end_time = time.time()
-            run = end_time - start_time
+            end_time_1 = time.time()
+            run = end_time_1 - start_time_1
             run_time.append(run)
             avg_run_time += run/ITE
             sheet.cell(row=row, column=column, value=best_fitness)
