@@ -25,7 +25,7 @@ global SET_LAST_10
 global BEST
 
 # Set up chỉ số -------------------------------------------------------------------
-ITE = 5
+ITE = 1
 epsilon = (-1) * 0.00001
 # 15:   120,    20:    150
 # BREAKLOOP = Data.number_of_cities * 8
@@ -451,11 +451,11 @@ for txt_file in txt_files:
         # Đọc nội dung từ file .txt và xử lý nó
         # print(txt_file)
         log = os.path.basename(txt_file) + str(Data.number_of_cities) +'.log'
-        log_folder = 'Result/log_result'
-        log_file_path = os.path.join(log_folder, log)
-        log_file = open(log_file_path, 'w')
-        sys.stdout = log_file
-        Data.read_data_2024(txt_file, "center")
+        # log_folder = 'Result/log_result'
+        # log_file_path = os.path.join(log_folder, log)
+        # log_file = open(log_file_path, 'w')
+        # sys.stdout = log_file
+        Data.read_data_2024(txt_file, center)
         result = []
         run_time = []
         avg = 0
