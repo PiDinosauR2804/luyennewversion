@@ -33,7 +33,7 @@ epsilon = (-1) * 0.00001
 LOOP_IMPROVED = 0
 SET_LAST_10 = [] 
 BEST = []
-TIME_LIMIT = 20000
+TIME_LIMIT = 4000
 data_set = os.getenv('DATA_SET', "U_10_0.5_Num_1.txt")
 center = os.getenv('CENTER', "center")
 start_time = time.time()
@@ -282,10 +282,10 @@ def Tabu_search(init_solution, tabu_tenure, CC, first_time, Data1, index_conside
             current_truck_time = current_neighborhood[index_best_nei][1][index[index_best_nei]][1][1]
             current_sum_fitness = current_neighborhood[index_best_nei][1][index[index_best_nei]][1][2]
             
-            print("----------",i,"--------------------------")
-            print(current_sol)
-            print(current_fitness)
-            print(current_neighborhood[index_best_nei][0])
+            # print("----------",i,"--------------------------")
+            # print(current_sol)
+            # print(current_fitness)
+            # print(current_neighborhood[index_best_nei][0])
             
             # print(current_fitness, current_sol)
             Data1.append(current_fitness)

@@ -1231,8 +1231,8 @@ def Neighborhood_combine_truck_and_drone_neighborhood_with_package(name_of_truck
                         solution_pack.pop()
     
     for i in range(len(potential_solution)):
-        print("-----", name_of_truck_neiborhood, "-----")
-        print(potential_solution[i][0])
+        # print("-----", name_of_truck_neiborhood, "-----")
+        # print(potential_solution[i][0])
         j = 0
         sol = copy.deepcopy(potential_solution[i])
         min_to_improve = potential_solution[i][1][0]
@@ -1346,8 +1346,8 @@ def Neighborhood_combine_truck_and_drone_neighborhood_with_tabu_list_with_packag
     # print(potential_solution[0][0])
 
     for i in range(len(potential_solution)):
-        print("-----", name_of_truck_neiborhood, "-----")
-        print(potential_solution[i][0])
+        # print("-----", name_of_truck_neiborhood, "-----")
+        # print(potential_solution[i][0])
         # print("--------")
         # print(potential_solution[i][0][0])
         # print(potential_solution[i][0][1])
