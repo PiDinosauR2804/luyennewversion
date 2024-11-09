@@ -41,7 +41,7 @@ start_time = time.time()
 
 # random.seed(7)
 
-def roulette_wheel_selection(population, fitness_scores):
+def roulette_wheel_selection(population, fitness_scores): 
     total_fitness = sum(fitness_scores)
     probabilities = [score / total_fitness for score in fitness_scores]
     selected_index = np.random.choice(len(population), p=probabilities)
