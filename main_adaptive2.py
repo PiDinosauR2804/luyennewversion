@@ -33,7 +33,7 @@ epsilon = (-1) * 0.00001
 LOOP_IMPROVED = 0
 SET_LAST_10 = [] 
 BEST = []
-TIME_LIMIT = 100000
+TIME_LIMIT = 4000
 data_set = os.getenv('DATA_SET', "U_10_0.5_Num_1.txt")
 center = os.getenv('CENTER', "center")
 start_time = time.time()
@@ -65,7 +65,7 @@ def Tabu_search(init_solution, tabu_tenure, CC, first_time, Data1, index_conside
     
     Result_print = []
     # LOOP = BREAKLOOP * AA
-    # print(Data.standard_deviation)
+    # print(Data.standard_deviation)T +=
     global current_neighborhood
     global LOOP_IMPROVED
     LOOP_IMPROVED = 0
