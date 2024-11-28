@@ -26,7 +26,7 @@ global BEST
 global start_time
 
 # Set up chỉ số -------------------------------------------------------------------
-ITE = 3
+ITE = 10
 epsilon = (-1) * 0.00001
 # 15:   120,    20:    150
 # BREAKLOOP = Data.number_of_cities * 8
