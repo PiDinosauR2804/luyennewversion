@@ -26,7 +26,7 @@ global BEST
 global start_time
 
 # Set up chỉ số -------------------------------------------------------------------
-ITE = 3
+ITE = 5
 epsilon = (-1) * 0.00001
 # 15:   120,    20:    150
 # BREAKLOOP = Data.number_of_cities * 8
@@ -76,7 +76,7 @@ def Tabu_search(init_solution, tabu_tenure, CC, first_time, Data1, index_conside
     LOOP = min(int(Data.number_of_cities*math.log(Data.number_of_cities)), 100)
 
     # BREAKLOOP = Data.number_of_cities
-    SEGMENT = 5
+    SEGMENT = 50
     END_SEGMENT =  int(Data.number_of_cities/math.log10(Data.number_of_cities))
     
     T = 0
