@@ -14,6 +14,7 @@ import csv
 import numpy as np
 import math
 import sys
+import json
 global LOOP
 global tabu_tenure
 global best_sol
@@ -23,20 +24,25 @@ global current_neighborhood
 global LOOP_IMPROVED
 global SET_LAST_10
 global BEST
+global start_time
 
 # Set up chỉ số -------------------------------------------------------------------
 ITE = 5
 epsilon = (-1) * 0.00001
 # 15:   120,    20:    150
-# BREAKLOOP = Data.number_of_cities * 8
+# BREAKLOOP = Data.number_of_cities * 
 LOOP_IMPROVED = 0
 SET_LAST_10 = [] 
 BEST = []
+TIME_LIMIT = 3000
+data_set = os.getenv('DATA_SET', "U_10_0.5_Num_1.txt")
+center = os.getenv('CENTER', "center")
+start_time = time.time()
 # 
 
 # random.seed(7)
 
-def roulette_wheel_selection(population, fitness_scores):
+def roulette_wheel_selection(population, fitness_scores): 
     total_fitness = sum(fitness_scores)
     probabilities = [score / total_fitness for score in fitness_scores]
     selected_index = np.random.choice(len(population), p=probabilities)
@@ -45,6 +51,8 @@ def roulette_wheel_selection(population, fitness_scores):
 def Tabu_search(init_solution, tabu_tenure, CC, first_time, Data1, index_consider_elite_set):
     solution_pack_len = 5
     solution_pack = []
+
+    
 
     current_fitness, current_truck_time, current_sum_fitness = Function.fitness(init_solution)
     best_sol = init_solution
@@ -58,7 +66,7 @@ def Tabu_search(init_solution, tabu_tenure, CC, first_time, Data1, index_conside
     
     Result_print = []
     # LOOP = BREAKLOOP * AA
-    # print(Data.standard_deviation)
+    # print(Data.standard_deviation)T +=
     global current_neighborhood
     global LOOP_IMPROVED
     LOOP_IMPROVED = 0
@@ -69,7 +77,7 @@ def Tabu_search(init_solution, tabu_tenure, CC, first_time, Data1, index_conside
     LOOP = min(int(Data.number_of_cities*math.log(Data.number_of_cities)), 100)
 
     # BREAKLOOP = Data.number_of_cities
-    SEGMENT = 5
+    SEGMENT = 7
     END_SEGMENT =  int(Data.number_of_cities/math.log10(Data.number_of_cities))
     
     T = 0
@@ -78,7 +86,9 @@ def Tabu_search(init_solution, tabu_tenure, CC, first_time, Data1, index_conside
     current_sol = init_solution
     
     while T < SEGMENT:
-        
+        end_time = time.time()
+        if end_time - start_time > TIME_LIMIT:
+            break
         tabu_tenure = tabu_tenure1 = tabu_tenure3 = tabu_tenure2 = random.uniform(2*math.log(Data.number_of_cities), Data.number_of_cities)
         Tabu_Structure = [(tabu_tenure +1) * (-1)] * Data.number_of_cities
         Tabu_Structure1 = [(tabu_tenure +1) * (-1)] * Data.number_of_cities
@@ -273,10 +283,10 @@ def Tabu_search(init_solution, tabu_tenure, CC, first_time, Data1, index_conside
             current_truck_time = current_neighborhood[index_best_nei][1][index[index_best_nei]][1][1]
             current_sum_fitness = current_neighborhood[index_best_nei][1][index[index_best_nei]][1][2]
             
-            print("----------",i,"--------------------------")
-            print(current_sol)
-            print(current_fitness)
-            print(current_neighborhood[index_best_nei][0])
+            # print("----------",i,"--------------------------")
+            # print(current_sol)
+            # print(current_fitness)
+            # print(current_neighborhood[index_best_nei][0])
             
             # print(current_fitness, current_sol)
             Data1.append(current_fitness)
@@ -352,8 +362,8 @@ def Tabu_search(init_solution, tabu_tenure, CC, first_time, Data1, index_conside
 def Tabu_search_for_CVRP(CC):
     Data1 = []
     list_init = []
-    
     start_time = time.time()
+    
     current_sol5 = Function.initial_solution7()
     list_init.append(current_sol5)
 
@@ -402,7 +412,6 @@ def Tabu_search_for_CVRP(CC):
                     best_fitness_in_brnei = cfnode
             temp = ["break", "break", "break", "break", "break", "break", "break"]
             Data1.append(temp)
-            print("uhuhu")
             print(best_sol_in_brnei)
             best_sol1, best_fitness1, result_print1, solution_pack1, Data1 = Tabu_search(init_solution=best_sol_in_brnei, tabu_tenure=Data.number_of_cities-1, CC=CC, first_time=False, Data1=Data1, index_consider_elite_set=pi+1)
             # print("-----------------", pi, "------------------------")
@@ -412,9 +421,6 @@ def Tabu_search_for_CVRP(CC):
                 best_sol = best_sol1
                 best_fitness = best_fitness1
         
-        end_time = time.time()
-        # if end_time - start_time > 3000:
-        #     break
 
     return best_fitness, best_sol
 
@@ -425,43 +431,48 @@ def Tabu_search_for_CVRP(CC):
 # folder_path = "test_data//Smith//TSPrd(time)//Solomon//10//"
 folder_path = "test_data//MTVRPRDDR//Instances//"
 # Danh sách tất cả các file .txt trong thư mục
-txt_files = glob.glob(os.path.join(folder_path, "U_15_0.5_Num_*.txt"))
+txt_files = glob.glob(os.path.join(folder_path, data_set))
 # txt_files = glob.glob(os.path.join(folder_path, "*.dat"))
 # Tạo một tệp Excel mới
 print(txt_files)
-workbook = openpyxl.Workbook()
-sheet = workbook.active
+# workbook = openpyxl.Workbook()
+# sheet = workbook.active
 
 # Dòng và cột bắt đầu ghi kết quả
-row = 1
-column = 1
+# row = 1
+# column = 1
+
+output_json = {}
+
 
 # Ghi tên file .txt vào cột đầu tiên
-for txt_file in txt_files:
-    sheet.cell(row=row, column=column, value=os.path.basename(txt_file))
-    row += 1
+# for txt_file in txt_files:
+#     sheet.cell(row=row, column=column, value=os.path.basename(txt_file))
+#     row += 1
 # Đặt lại dòng và cột cho việc ghi kết quả
 row = 1
 for txt_file in txt_files:
     column = 2
     with open(txt_file, 'r') as file:
+        file_name = os.path.basename(txt_file)
         # Đọc nội dung từ file .txt và xử lý nó
         # print(txt_file)
         log = os.path.basename(txt_file) + str(Data.number_of_cities) +'.log'
-        log_folder = 'Result/log_result'
-        log_file_path = os.path.join(log_folder, log)
-        log_file = open(log_file_path, 'w')
-        sys.stdout = log_file
-        Data.read_data_2024(txt_file, "center")
+        # log_folder = 'Result/log_result'
+        # log_file_path = os.path.join(log_folder, log)
+        # log_file = open(log_file_path, 'w')
+        # sys.stdout = log_file
+        Data.read_data_2024(txt_file, center)
         result = []
         run_time = []
         avg = 0
         avg_run_time = 0
         best_csv_fitness = 1000000
+        
         for i in range(ITE):
             BEST = []
             # print("------------------------",i,"------------------------")
-            start_time = time.time()
+            start_time_1 = time.time()
             best_fitness, best_sol = Tabu_search_for_CVRP(1)
             print("---------- RESULT ----------")
             print(best_sol)
@@ -469,23 +480,36 @@ for txt_file in txt_files:
             avg += best_fitness/ITE
             result.append(best_fitness)
             print(Function.Check_if_feasible(best_sol))
-            end_time = time.time()
-            run = end_time - start_time
+            end_time_1 = time.time()
+            run = end_time_1 - start_time_1
             run_time.append(run)
             avg_run_time += run/ITE
-            sheet.cell(row=row, column=column, value=best_fitness)
+            iteration_result = {
+                "iteration": i + 1,
+                "best_fitness": best_fitness,
+                "runtime": run,
+                "feasible": Function.Check_if_feasible(best_sol)
+            }
+            output_json[file_name]["results"].append(iteration_result)
+            # sheet.cell(row=row, column=column, value=best_fitness)
 
             column += 1
             if best_csv_fitness > best_fitness:
                 best_csv_sol = best_sol
                 best_csv_fitness = best_fitness
-            if i == ITE - 1:
-                sheet.cell(row=row, column=column, value=avg_run_time)
-                sheet.cell(row=row, column=column+1, value=str(best_csv_sol))
-            workbook.save("Result/excel_result/15_Outside.xlsx")
+            # if i == ITE - 1:
+            #     sheet.cell(row=row, column=column, value=avg_run_time)
+            #     sheet.cell(row=row, column=column+1, value=str(best_csv_sol))
+            # workbook.save(f"Random_{data_set}_{center}_CL1.xlsx")
         # Tăng dòng cho lần chạy tiếp theo
-        row += 1
-        log_file.close()
+        # row += 1
+    output_json[file_name]["average_runtime"] = avg_run_time
+    output_json[file_name]["best_solution"] = str(best_csv_sol)
+    output_json[file_name]["best_fitness"] = best_csv_fitness
+        
+output_file = f"Results_{data_set}_{center}_CL1.json"
+with open(output_file, 'w') as json_file:
+    json.dump(output_json, json_file, indent=4)
 
-workbook.close()
+print(f"Results saved to {output_file}")
 
