@@ -454,7 +454,7 @@ row = 1
 for txt_file in txt_files:
     column = 2
     with open(txt_file, 'r') as file:
-        file_name = str(os.path.basename(txt_file))
+        file_name = os.path.basename(txt_file).split('.')[0]
         # Đọc nội dung từ file .txt và xử lý nó
         # print(txt_file)
         log = os.path.basename(txt_file) + str(Data.number_of_cities) +'.log'
