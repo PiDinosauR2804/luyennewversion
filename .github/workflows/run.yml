@@ -36,7 +36,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: excel-results-${{ matrix.center }}-${{ matrix.data_set }}  # Thêm iteration vào tên file
-          path: Random_*_CL1.json
+          path: Results_*_CL1.json
 
   summary:
     name: Summary results
@@ -57,4 +57,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: excel-results-summary
-          path: Random_*_CL1.json 
+          path: Results_*_CL1.json 

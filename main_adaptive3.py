@@ -450,65 +450,62 @@ output_json = {}
 #     sheet.cell(row=row, column=column, value=os.path.basename(txt_file))
 #     row += 1
 # Đặt lại dòng và cột cho việc ghi kết quả
-row = 1
-for txt_file in txt_files:
-    column = 2
-    with open(txt_file, 'r') as file:
-        file_name = os.path.basename(txt_file).split('.')[0]
-        # Đọc nội dung từ file .txt và xử lý nó
-        # print(txt_file)
-        log = os.path.basename(txt_file) + str(Data.number_of_cities) +'.log'
-        # log_folder = 'Result/log_result'
-        # log_file_path = os.path.join(log_folder, log)
-        # log_file = open(log_file_path, 'w')
-        # sys.stdout = log_file
-        Data.read_data_2024(txt_file, center)
-        result = []
-        run_time = []
-        avg = 0
-        avg_run_time = 0
-        best_csv_fitness = 1000000
-        
-        if file_name not in output_json:
-            output_json[file_name] = {"results": []}
-        
-        for i in range(ITE):
-            BEST = []
-            # print("------------------------",i,"------------------------")
-            start_time_1 = time.time()
-            best_fitness, best_sol = Tabu_search_for_CVRP(1)
-            print("---------- RESULT ----------")
-            print(best_sol)
-            print(best_fitness)
-            avg += best_fitness/ITE
-            result.append(best_fitness)
-            print(Function.Check_if_feasible(best_sol))
-            end_time_1 = time.time()
-            run = end_time_1 - start_time_1
-            run_time.append(run)
-            avg_run_time += run/ITE
-            iteration_result = {
-                "iteration": i + 1,
-                "best_fitness": best_fitness,
-                "runtime": run,
-            }
-            output_json[file_name]["results"].append(iteration_result)
-            # sheet.cell(row=row, column=column, value=best_fitness)
 
-            column += 1
-            if best_csv_fitness > best_fitness:
-                best_csv_sol = best_sol
-                best_csv_fitness = best_fitness
-            # if i == ITE - 1:
-            #     sheet.cell(row=row, column=column, value=avg_run_time)
-            #     sheet.cell(row=row, column=column+1, value=str(best_csv_sol))
-            # workbook.save(f"Random_{data_set}_{center}_CL1.xlsx")
-        # Tăng dòng cho lần chạy tiếp theo
-        # row += 1
-        
 output_file = f"Results_{data_set}_{center}_CL1.json"
+row = 1
 with open(output_file, 'w') as json_file:
-    json.dump(output_json, json_file, indent=4)
+    for txt_file in txt_files:
+        column = 2
+        with open(txt_file, 'r') as file:
+            file_name = os.path.basename(txt_file).split('.')[0]
+            # Đọc nội dung từ file .txt và xử lý nó
+            # print(txt_file)
+            log = os.path.basename(txt_file) + str(Data.number_of_cities) +'.log'
+            # log_folder = 'Result/log_result'
+            # log_file_path = os.path.join(log_folder, log)
+            # log_file = open(log_file_path, 'w')
+            # sys.stdout = log_file
+            Data.read_data_2024(txt_file, center)
+            result = []
+            run_time = []
+            avg = 0
+            avg_run_time = 0
+            best_csv_fitness = 1000000
+            
+            for i in range(ITE):
+                BEST = []
+                # print("------------------------",i,"------------------------")
+                start_time_1 = time.time()
+                best_fitness, best_sol = Tabu_search_for_CVRP(1)
+                print("---------- RESULT ----------")
+                print(best_sol)
+                print(best_fitness)
+                avg += best_fitness/ITE
+                result.append(best_fitness)
+                print(Function.Check_if_feasible(best_sol))
+                end_time_1 = time.time()
+                run = end_time_1 - start_time_1
+                run_time.append(run)
+                avg_run_time += run/ITE
+                iteration_result = {
+                    "file_name": file_name,
+                    "iteration": i + 1,
+                    "best_fitness": best_fitness,
+                    "runtime": run,
+                }
 
-print(f"Results saved to {output_file}")
+                # Ghi kết quả dưới dạng từng dòng JSON
+                json_file.write(json.dumps(iteration_result) + '\n')
+                # sheet.cell(row=row, column=column, value=best_fitness)
+
+                if best_csv_fitness > best_fitness:
+                    best_csv_sol = best_sol
+                    best_csv_fitness = best_fitness
+                # if i == ITE - 1:
+                #     sheet.cell(row=row, column=column, value=avg_run_time)
+                #     sheet.cell(row=row, column=column+1, value=str(best_csv_sol))
+                # workbook.save(f"Random_{data_set}_{center}_CL1.xlsx")
+            # Tăng dòng cho lần chạy tiếp theo
+            # row += 1
+
 
