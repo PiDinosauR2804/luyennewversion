@@ -34,7 +34,7 @@ epsilon = (-1) * 0.00001
 LOOP_IMPROVED = 0
 SET_LAST_10 = [] 
 BEST = []
-TIME_LIMIT = 3000
+TIME_LIMIT = 3600
 data_set = os.getenv('DATA_SET', "U_10_0.5_Num_1.txt")
 center = os.getenv('CENTER', "center")
 start_time = time.time()
@@ -489,9 +489,13 @@ with open(output_file, 'w') as json_file:
                 avg_run_time += run/ITE
                 iteration_result = {
                     "file_name": file_name,
+                    "number_of_trucks": Data.number_of_trucks,
+                    "drone_capacity": Data.drone_capacity,
+                    "number_of_drones": Data.number_of_drones,
                     "iteration": i + 1,
                     "best_fitness": best_fitness,
                     "runtime": run,
+                    "best_solution": best_sol,
                 }
 
                 # Ghi kết quả dưới dạng từng dòng JSON
