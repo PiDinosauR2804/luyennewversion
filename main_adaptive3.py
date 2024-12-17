@@ -469,6 +469,9 @@ for txt_file in txt_files:
         avg_run_time = 0
         best_csv_fitness = 1000000
         
+        if file_name not in output_json:
+            output_json[file_name] = {"results": []}
+        
         for i in range(ITE):
             BEST = []
             # print("------------------------",i,"------------------------")
@@ -488,7 +491,6 @@ for txt_file in txt_files:
                 "iteration": i + 1,
                 "best_fitness": best_fitness,
                 "runtime": run,
-                "feasible": Function.Check_if_feasible(best_sol)
             }
             output_json[file_name]["results"].append(iteration_result)
             # sheet.cell(row=row, column=column, value=best_fitness)
@@ -503,9 +505,6 @@ for txt_file in txt_files:
             # workbook.save(f"Random_{data_set}_{center}_CL1.xlsx")
         # Tăng dòng cho lần chạy tiếp theo
         # row += 1
-    output_json[file_name]["average_runtime"] = avg_run_time
-    output_json[file_name]["best_solution"] = str(best_csv_sol)
-    output_json[file_name]["best_fitness"] = best_csv_fitness
         
 output_file = f"Results_{data_set}_{center}_CL1.json"
 with open(output_file, 'w') as json_file:
