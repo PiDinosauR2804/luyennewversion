@@ -36,7 +36,6 @@ A_ratio = 1
 B_ratio = 0.7
 C_ratio = 0.1
 
-
 def read_data(path):
     global data
     global number_of_cities
