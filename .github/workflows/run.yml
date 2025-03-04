@@ -1,7 +1,7 @@
 name: Workflow name
 
 on: push
-
+ 
 permissions:
   contents: read
 
