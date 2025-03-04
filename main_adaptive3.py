@@ -101,8 +101,8 @@ def Tabu_search(init_solution, tabu_tenure, CC, first_time, Data1, index_conside
         prev_fitness = current_fitness
         
         LOOP_IMPROVED = 0
-        lennn = [0] * 6
-        lenght_i = [0] * 6
+        lennn = [0] * 7
+        lenght_i = [0] * 7
         i = 0
         while i < END_SEGMENT:
             current_neighborhood = []
@@ -125,9 +125,12 @@ def Tabu_search(init_solution, tabu_tenure, CC, first_time, Data1, index_conside
             elif choose == 5: 
                 current_neighborhood3, solution_pack = Neighborhood.Neighborhood_combine_truck_and_drone_neighborhood_with_package(name_of_truck_neiborhood=Neighborhood.Neighborhood_split_two_truck_term, solution=current_sol, number_of_potiential_solution=CC, number_of_loop_drone=2, whether_use_truck_time=False, solution_pack=solution_pack, solution_pack_len=solution_pack_len, use_solution_pack=first_time, index_consider_elite_set=index_consider_elite_set)
                 current_neighborhood.append([6, current_neighborhood3])
+            elif choose == 6:
+                current_neighborhood3, solution_pack = Neighborhood.Neighborhood_combine_truck_and_drone_neighborhood_with_package(name_of_truck_neiborhood=Neighborhood.swap_two_array, solution=current_sol, number_of_potiential_solution=CC, number_of_loop_drone=2, whether_use_truck_time=False, solution_pack=solution_pack, solution_pack_len=solution_pack_len, use_solution_pack=first_time, index_consider_elite_set=index_consider_elite_set)
+                current_neighborhood.append([7, current_neighborhood3])
             else:
                 current_neighborhood3, solution_pack = Neighborhood.Neighborhood_combine_truck_and_drone_neighborhood_with_package(name_of_truck_neiborhood=Neighborhood.Neighborhood_stack_two_truck_term, solution=current_sol, number_of_potiential_solution=CC, number_of_loop_drone=2, whether_use_truck_time=False, solution_pack=solution_pack, solution_pack_len=solution_pack_len, use_solution_pack=first_time, index_consider_elite_set=index_consider_elite_set)
-                current_neighborhood.append([7, current_neighborhood3])
+                current_neighborhood.append([8, current_neighborhood3])
 
             flag = False
             index = [0] * len(current_neighborhood)
