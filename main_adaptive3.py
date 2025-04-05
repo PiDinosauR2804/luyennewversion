@@ -39,9 +39,12 @@ data_set = os.getenv('DATA_SET', "U_10_0.5_Num_1.txt")
 center = os.getenv('CENTER', "center")
 start_time = time.time()
 # 
-
+factor = 0.3 #0.3 0.6
+alpha = [0.5, 0.3, 0.1]
+theta = 2
+SEGMENT = 12
 # random.seed(7)
-
+solution_pack_len = 0
 def roulette_wheel_selection(population, fitness_scores): 
     total_fitness = sum(fitness_scores)
     probabilities = [score / total_fitness for score in fitness_scores]
@@ -49,7 +52,6 @@ def roulette_wheel_selection(population, fitness_scores):
     return population[selected_index]
 
 def Tabu_search(init_solution, tabu_tenure, CC, first_time, Data1, index_consider_elite_set):
-    solution_pack_len = 5
     solution_pack = []
 
     
@@ -62,7 +64,6 @@ def Tabu_search(init_solution, tabu_tenure, CC, first_time, Data1, index_conside
     
     lennn = [0] * 6
     lenght_i = [0] * 6
-    i = 0
     
     Result_print = []
     # LOOP = BREAKLOOP * AA
@@ -74,31 +75,42 @@ def Tabu_search(init_solution, tabu_tenure, CC, first_time, Data1, index_conside
     use_optimize_truck_route = False
     
     Data1 = [['act', 'fitness', 'change1', 'change2', 'solution', 'tabu structue', 'tabu structure1']]
-    LOOP = min(int(Data.number_of_cities*math.log(Data.number_of_cities)), 100)
 
     # BREAKLOOP = Data.number_of_cities
-    SEGMENT = 7
-    END_SEGMENT =  int(Data.number_of_cities/math.log10(Data.number_of_cities))
+    END_SEGMENT =  int(Data.number_of_cities/math.log10(Data.number_of_cities))*theta
     
     T = 0
     nei_set = [0, 1, 2, 3, 4, 5, 6]
     weight = [1/len(nei_set)]*len(nei_set)
     current_sol = init_solution
-    
-    while T < SEGMENT:
+    COUNT = 0
+    while COUNT < 3:
         end_time = time.time()
         if end_time - start_time > TIME_LIMIT:
             break
+        print("+++++++++++++++", COUNT, "+++++++++++++++")
+        if T > 3:
+            COUNT += 1
+            T = 0
+            current_neighborhood5, solution_pack = Neighborhood.swap_two_array(current_sol)
+            best_sol_in_brnei = current_neighborhood5[0][0]
+            best_fitness_in_brnei = current_neighborhood5[0][1][0]
+            for i in range(1, len(current_neighborhood5)):
+                cfnode = current_neighborhood5[i][1][0]
+                if cfnode - best_fitness_in_brnei < epsilon:
+                    best_sol_in_brnei = current_neighborhood5[i][0]
+                    best_fitness_in_brnei = cfnode
+            
+            current_sol = best_sol_in_brnei
+        
         tabu_tenure = tabu_tenure1 = tabu_tenure3 = tabu_tenure2 = random.uniform(2*math.log(Data.number_of_cities), Data.number_of_cities)
         Tabu_Structure = [(tabu_tenure +1) * (-1)] * Data.number_of_cities
         Tabu_Structure1 = [(tabu_tenure +1) * (-1)] * Data.number_of_cities
         Tabu_Structure2 = [(tabu_tenure +1) * (-1)] * Data.number_of_cities
         Tabu_Structure3 = [(tabu_tenure +1) * (-1)] * Data.number_of_cities
-        factor = 0.3 #0.3 0.6
         score = [0]*len(nei_set)
         used = [0]*len(nei_set)
         prev_f = best_fitness
-        prev_fitness = current_fitness
         
         LOOP_IMPROVED = 0
         lennn = [0] * 7
@@ -106,6 +118,8 @@ def Tabu_search(init_solution, tabu_tenure, CC, first_time, Data1, index_conside
         i = 0
         while i < END_SEGMENT:
             current_neighborhood = []
+ 
+            prev_fitness = current_fitness
             choose = roulette_wheel_selection(nei_set, weight)
             if choose == 0:
                 current_neighborhood1, solution_pack = Neighborhood.Neighborhood_combine_truck_and_drone_neighborhood_with_tabu_list_with_package(name_of_truck_neiborhood=Neighborhood10.Neighborhood_one_opt_standard, solution=current_sol, number_of_potial_solution=CC, number_of_loop_drone=2, tabu_list=Tabu_Structure, tabu_tenure=tabu_tenure,  index_of_loop=lenght_i[1], best_fitness=best_fitness, kind_of_tabu_structure=1, need_truck_time=False, solution_pack=solution_pack, solution_pack_len=solution_pack_len, use_solution_pack=first_time, index_consider_elite_set=index_consider_elite_set)
@@ -125,9 +139,6 @@ def Tabu_search(init_solution, tabu_tenure, CC, first_time, Data1, index_conside
             elif choose == 5: 
                 current_neighborhood3, solution_pack = Neighborhood.Neighborhood_combine_truck_and_drone_neighborhood_with_package(name_of_truck_neiborhood=Neighborhood.Neighborhood_split_two_truck_term, solution=current_sol, number_of_potiential_solution=CC, number_of_loop_drone=2, whether_use_truck_time=False, solution_pack=solution_pack, solution_pack_len=solution_pack_len, use_solution_pack=first_time, index_consider_elite_set=index_consider_elite_set)
                 current_neighborhood.append([6, current_neighborhood3])
-            elif choose == 6:
-                current_neighborhood3, solution_pack = Neighborhood.Neighborhood_combine_truck_and_drone_neighborhood_with_package(name_of_truck_neiborhood=Neighborhood.swap_two_array, solution=current_sol, number_of_potiential_solution=CC, number_of_loop_drone=2, whether_use_truck_time=False, solution_pack=solution_pack, solution_pack_len=solution_pack_len, use_solution_pack=first_time, index_consider_elite_set=index_consider_elite_set)
-                current_neighborhood.append([7, current_neighborhood3])
             else:
                 current_neighborhood3, solution_pack = Neighborhood.Neighborhood_combine_truck_and_drone_neighborhood_with_package(name_of_truck_neiborhood=Neighborhood.Neighborhood_stack_two_truck_term, solution=current_sol, number_of_potiential_solution=CC, number_of_loop_drone=2, whether_use_truck_time=False, solution_pack=solution_pack, solution_pack_len=solution_pack_len, use_solution_pack=first_time, index_consider_elite_set=index_consider_elite_set)
                 current_neighborhood.append([8, current_neighborhood3])
@@ -335,11 +346,11 @@ def Tabu_search(init_solution, tabu_tenure, CC, first_time, Data1, index_conside
 
             used[choose] += 1
             if flag == True:
-                score[choose] += 0.5
+                score[choose] += alpha[0]
             elif current_fitness - prev_fitness < epsilon:
-                score[choose] += 0.3
+                score[choose] += alpha[1]
             else:
-                score[choose] += 0.1
+                score[choose] += alpha[2]
 
             for j in range(len(nei_set)):
                 if used[j] == 0:
@@ -394,7 +405,7 @@ def Tabu_search_for_CVRP(CC):
     # print(best_sol) 
     # print(best_fitness)
     # print(Function.Check_if_feasible(best_sol))
-    solution_pack_len = 5
+
     best_sol, best_fitness, result_print, solution_pack, Data1 = Tabu_search(init_solution=current_sol, tabu_tenure=Data.number_of_cities-1, CC=CC, first_time=True, Data1=Data1, index_consider_elite_set=0)
     for pi in range(solution_pack_len):
         # print("+++++++++++++++++++++++++",len(solution_pack),"+++++++++++++++++++++++++",)
