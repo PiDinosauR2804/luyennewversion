@@ -324,6 +324,7 @@ def findIndexOfDropPackage(new_solution, solution, city_change, truck_time, i, j
     return new_solution
 
 def swap_two_array(solution):
+    solution_pack = []
     neighborhood = []
     for aa in range(len(solution[0])):
         length = len(solution[0][aa]) - 1
@@ -407,7 +408,7 @@ def swap_two_array(solution):
                         pack_child.append(aa)
                         pack_child.append(aa)
                         neighborhood.append(pack_child)
-    return neighborhood
+    return neighborhood, solution_pack
 
 def findUpAndLowBoundedOfPackage(solution, package):
     index_truck = -1
