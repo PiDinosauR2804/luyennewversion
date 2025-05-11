@@ -27,7 +27,9 @@ global BEST
 global start_time
 
 # Set up chỉ số -------------------------------------------------------------------
-ITE = 3
+solutionnnnn = []
+fitnesssssss = []
+ITE = 5
 epsilon = (-1) * 0.00001
 # 15:   120,    20:    150
 # BREAKLOOP = Data.number_of_cities * 
@@ -491,6 +493,8 @@ with open(output_file, 'w') as json_file:
                 # print("------------------------",i,"------------------------")
                 start_time_1 = time.time()
                 best_fitness, best_sol = Tabu_search_for_CVRP(1)
+                solutionnnnn.append(best_sol)
+                fitnesssssss.append(best_fitness)
                 print("---------- RESULT ----------")
                 print(best_sol)
                 print(best_fitness)
@@ -510,6 +514,9 @@ with open(output_file, 'w') as json_file:
                     "best_fitness": best_fitness,
                     "runtime": run,
                     "best_solution": best_sol,
+                    "all_solution": solutionnnnn,
+                    "Numrun": ITE,
+                    "all_fitness": fitnesssssss
                 }
 
                 # Ghi kết quả dưới dạng từng dòng JSON
